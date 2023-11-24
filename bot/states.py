@@ -85,16 +85,16 @@ class StateYDBStorage(StateStorageBase):
             return True
 
 
-class RegisterState(StatesGroup):
-    first_name = State()
-    last_name = State()
-    age = State()
-
-
-class DeleteAccountState(StatesGroup):
-    are_you_sure = State()
-
-
-class ChangeDataState(StatesGroup):
-    select_field = State()
-    write_new_value = State()
+# class RegisterState(StatesGroup):
+#     first_name = State()
+#     last_name = State()
+#     age = State()
+#
+#
+# class DeleteAccountState(StatesGroup):
+#     are_you_sure = State()
+#
+#
+# class ChangeDataState(StatesGroup):
+#     select_field = State()
+#     write_new_value = State()
