@@ -32,6 +32,7 @@ def handle_cancel_add(message, bot, pool):
 def handle_add_name(message, bot, pool):
     current_film = db_model.get_film(pool, message.from_user.id, message.text)
     if current_film:
+        bot.delete_state(message.from_user.id, message.chat.id)
         bot.send_message(message.chat.id, texts.ADD_EXISTS, reply_markup=keyboards.EMPTY)
         return
     bot.delete_state(message.from_user.id, message.chat.id)
@@ -59,6 +60,7 @@ def handle_cancel_delete(message, bot, pool):
 def handle_delete_name(message, bot, pool):
     current_film = db_model.get_film(pool, message.from_user.id, message.text)
     if not current_film:
+        bot.delete_state(message.from_user.id, message.chat.id)
         bot.send_message(message.chat.id, texts.DELETE_NOT_EXISTS, reply_markup=keyboards.EMPTY)
         return
     bot.delete_state(message.from_user.id, message.chat.id)
