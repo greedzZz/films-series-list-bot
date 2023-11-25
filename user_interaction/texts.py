@@ -1,3 +1,9 @@
+START = ("Бот успешно запущен!\n\n"
+         "Список команд:\n"
+         "/show\n"
+         "/add\n"
+         "/update\n"
+         "/delete\n")
 # START = (
 #     "Hello! This is a simple bot that can store your name and age, "
 #     "show them back to you and delete them if requested.\n\n"

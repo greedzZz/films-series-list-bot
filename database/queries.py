@@ -2,6 +2,23 @@
 USERS_TABLE_PATH = "users"
 
 
+add_user = f"""
+    DECLARE $user_id AS Uint64;
+
+    INSERT INTO `{USERS_TABLE_PATH}` (user_id, state)
+    VALUES ($user_id, null);
+"""
+
+get_user = f"""
+    DECLARE $user_id AS Int64;
+
+    SELECT
+        user_id,
+        state
+    FROM `{USERS_TABLE_PATH}`
+    WHERE user_id == $user_id;
+"""
+
 get_user_state = f"""
     DECLARE $user_id AS Uint64;
 

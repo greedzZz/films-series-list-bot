@@ -12,6 +12,12 @@ class Handler:
         self.kwargs = kwargs
 
 
+def get_start_handlers():
+    return [
+        Handler(callback=handlers.handle_start, commands=["start"]),
+    ]
+
+
 # def get_start_handlers():
 #     return [
 #         Handler(callback=handlers.handle_start, commands=["start"]),
@@ -85,7 +91,7 @@ def create_bot(bot_token, pool):
     bot = TeleBot(bot_token, state_storage=state_storage)
 
     handlers = []
-    # handlers.extend(get_start_handlers())
+    handlers.extend(get_start_handlers())
     # handlers.extend(get_registration_handlers())
     # handlers.extend(get_show_data_handlers())
     # handlers.extend(get_delete_account_handlers())

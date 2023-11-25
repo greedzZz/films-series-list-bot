@@ -4,6 +4,22 @@ from database import queries
 from database.utils import execute_select_query, execute_update_query
 
 
+def add_user(pool, user_id):
+    execute_update_query(
+        pool,
+        queries.add_user,
+        user_id=user_id
+    )
+
+
+def get_user(pool, user_id):
+    result = execute_select_query(pool, queries.get_user, user_id=user_id)
+
+    if len(result) != 1:
+        return None
+    return result[0]
+
+
 def get_state(pool, user_id):
     results = execute_select_query(pool, queries.get_user_state, user_id=user_id)
     if len(results) == 0:

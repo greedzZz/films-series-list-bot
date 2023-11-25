@@ -4,6 +4,13 @@ from logs import logged_execution
 from user_interaction import texts
 
 
+@logged_execution
+def handle_start(message, bot, pool):
+    current_data = db_model.get_user(pool, message.from_user.id)
+    if not current_data:
+        db_model.add_user(pool, message.from_user.id)
+    bot.send_message(message.chat.id, texts.START, reply_markup=keyboards.EMPTY)
+
 # @logged_execution
 # def handle_start(message, bot, pool):
 #     bot.send_message(message.chat.id, texts.START, reply_markup=keyboards.EMPTY)
