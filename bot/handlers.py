@@ -101,7 +101,9 @@ def handle_update_name(message, bot, pool):
 @logged_execution
 def handle_update_choose_field(message, bot, pool):
     if message.text not in texts.UPDATE_LIST:
-        bot.send_message(message.chat.id, texts.UPDATE_UNKNOWN.format(texts.UPDATE_LIST),
+        bot.send_message(message.chat.id,
+                         texts.UPDATE_UNKNOWN.format(texts.UPDATE_LIST[0], texts.UPDATE_LIST[1],
+                                                     texts.UPDATE_LIST[2], texts.UPDATE_LIST[3]),
                          reply_markup=keyboards.get_reply_keyboard(texts.UPDATE_LIST, ["/cancel"]))
         return
 
@@ -123,7 +125,8 @@ def handle_update_enter_value(message, bot, pool):
 
     new_value = message.text
     if field == "type" and new_value not in texts.UPDATE_TYPE_LIST:
-        bot.send_message(message.chat.id, texts.UPDATE_WRONG_TYPE,
+        bot.send_message(message.chat.id,
+                         texts.UPDATE_WRONG_TYPE.format(texts.UPDATE_TYPE_LIST[0], texts.UPDATE_TYPE_LIST[1]),
                          reply_markup=keyboards.get_reply_keyboard(texts.UPDATE_TYPE_LIST, ["/cancel"]))
         return
     elif field == "year" and not new_value.isdigit():
@@ -140,7 +143,7 @@ def handle_update_enter_value(message, bot, pool):
     current_data[field] = new_value
     db_model.update_film(pool, **current_data)
 
-    bot.send_message(message.chat.id, texts.UPDATE_SUCCESS, reply_markup=keyboards.EMPTY,)
+    bot.send_message(message.chat.id, texts.UPDATE_SUCCESS.format(name), reply_markup=keyboards.EMPTY)
 
 # @logged_execution
 # def handle_start(message, bot, pool):
