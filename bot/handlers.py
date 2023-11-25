@@ -39,6 +39,33 @@ def handle_add_name(message, bot, pool):
     bot.send_message(message.chat.id, texts.ADD_SUCCESS.format(message.text), reply_markup=keyboards.EMPTY)
 
 
+@logged_execution
+def handle_delete(message, bot, pool):
+    current_user = db_model.get_user(pool, message.from_user.id)
+    if not current_user:
+        bot.send_message(message.chat.id, texts.NOT_STARTED, reply_markup=keyboards.EMPTY)
+        return
+    bot.send_message(message.chat.id, texts.DELETE, reply_markup=keyboards.get_reply_keyboard(["/cancel"]))
+    bot.set_state(message.from_user.id, states.DeleteState.name, message.chat.id)
+
+
+@logged_execution
+def handle_cancel_delete(message, bot, pool):
+    bot.delete_state(message.from_user.id, message.chat.id)
+    bot.send_message(message.chat.id, texts.DELETE_CANCEL, reply_markup=keyboards.EMPTY)
+
+
+@logged_execution
+def handle_delete_name(message, bot, pool):
+    current_film = db_model.get_film(pool, message.from_user.id, message.text)
+    if not current_film:
+        bot.send_message(message.chat.id, texts.DELETE_NOT_EXISTS, reply_markup=keyboards.EMPTY)
+        return
+    bot.delete_state(message.from_user.id, message.chat.id)
+    db_model.delete_film(pool, message.from_user.id, message.text)
+    bot.send_message(message.chat.id, texts.DELETE_SUCCESS.format(message.text), reply_markup=keyboards.EMPTY)
+
+
 # @logged_execution
 # def handle_start(message, bot, pool):
 #     bot.send_message(message.chat.id, texts.START, reply_markup=keyboards.EMPTY)

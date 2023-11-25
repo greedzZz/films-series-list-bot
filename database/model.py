@@ -40,12 +40,7 @@ def clear_state(pool, user_id):
 
 
 def add_film(pool, user_id, name):
-    execute_update_query(
-        pool,
-        queries.add_film,
-        user_id=user_id,
-        name=name
-    )
+    execute_update_query(pool, queries.add_film, user_id=user_id, name=name)
 
 
 def get_film(pool, user_id, name):
@@ -54,6 +49,10 @@ def get_film(pool, user_id, name):
     if len(result) != 1:
         return None
     return result[0]
+
+
+def delete_film(pool, user_id, name):
+    execute_update_query(pool, queries.delete_film, user_id=user_id, name=name)
 
 
 # def add_user_info(pool, user_id, first_name, last_name, age):

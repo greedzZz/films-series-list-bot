@@ -89,6 +89,10 @@ class AddState(StatesGroup):
     name = State()
 
 
+class DeleteState(StatesGroup):
+    name = State()
+
+
 # class RegisterState(StatesGroup):
 #     first_name = State()
 #     last_name = State()

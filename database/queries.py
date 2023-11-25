@@ -52,6 +52,15 @@ get_film = f"""
     AND name = $name;
 """
 
+delete_film = f"""
+    DECLARE $user_id AS Uint64;
+    DECLARE $name AS Utf8;
+
+    DELETE FROM `{FILMS_TABLE_PATH}`
+    WHERE user_id == $user_id
+    AND name = $name;;
+"""
+
 # get_user_info = f"""
 #     DECLARE $user_id AS Int64;
 #
