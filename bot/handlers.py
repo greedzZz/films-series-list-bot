@@ -185,7 +185,7 @@ def handle_show_sort(message, bot, pool):
 def handle_show_sort_choose_field(message, bot, pool):
     if message.text not in texts.SHOW_SORT_LIST:
         bot.send_message(message.chat.id,
-                         texts.UPDATE_UNKNOWN.format(texts.SHOW_SORT_CHOOSE[0], texts.SHOW_SORT_LIST[1],
+                         texts.UPDATE_UNKNOWN.format(texts.SHOW_SORT_LIST[0], texts.SHOW_SORT_LIST[1],
                                                      texts.SHOW_SORT_LIST[2], texts.SHOW_SORT_LIST[3]),
                          reply_markup=keyboards.get_reply_keyboard(texts.SHOW_SORT_LIST, ["/cancel"]))
         return
