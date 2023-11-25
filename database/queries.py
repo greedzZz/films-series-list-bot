@@ -79,36 +79,44 @@ get_films = f"""
 
     SELECT *
     FROM `{FILMS_TABLE_PATH}`
+    WHERE user_id == $user_id;
+"""
+
+get_films_order_by_name = f"""
+    DECLARE $user_id AS Uint64;
+
+    SELECT *
+    FROM `{FILMS_TABLE_PATH}`
     WHERE user_id == $user_id
     ORDER BY name ASC;
 """
 
 
-# get_films_order_by_type = f"""
-#     DECLARE $user_id AS Uint64;
-#
-#     SELECT *
-#     FROM `{FILMS_TABLE_PATH}`
-#     WHERE user_id == $user_id
-#     ORDER BY type ASC, name ASC;
-# """
-#
-#
-# get_films_order_by_year = f"""
-#     DECLARE $user_id AS Uint64;
-#
-#     SELECT *
-#     FROM `{FILMS_TABLE_PATH}`
-#     WHERE user_id == $user_id
-#     ORDER BY year DESC, name ASC;
-# """
-#
-#
-# get_films_order_by_country = f"""
-#     DECLARE $user_id AS Uint64;
-#
-#     SELECT *
-#     FROM `{FILMS_TABLE_PATH}`
-#     WHERE user_id == $user_id
-#     ORDER BY country ASC, name ASC;
-# """
+get_films_order_by_type = f"""
+    DECLARE $user_id AS Uint64;
+
+    SELECT *
+    FROM `{FILMS_TABLE_PATH}`
+    WHERE user_id == $user_id
+    ORDER BY type ASC, name ASC;
+"""
+
+
+get_films_order_by_year = f"""
+    DECLARE $user_id AS Uint64;
+
+    SELECT *
+    FROM `{FILMS_TABLE_PATH}`
+    WHERE user_id == $user_id
+    ORDER BY year DESC, name ASC;
+"""
+
+
+get_films_order_by_country = f"""
+    DECLARE $user_id AS Uint64;
+
+    SELECT *
+    FROM `{FILMS_TABLE_PATH}`
+    WHERE user_id == $user_id
+    ORDER BY country ASC, name ASC;
+"""

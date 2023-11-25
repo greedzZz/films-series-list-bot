@@ -153,7 +153,65 @@ def handle_show(message, bot, pool):
         bot.send_message(message.chat.id, texts.NOT_STARTED, reply_markup=keyboards.EMPTY)
         return
 
-    current_list = db_model.get_films(pool, message.from_user.id)
+    bot.send_message(message.chat.id, texts.SHOW_SORT,
+                     reply_markup=keyboards.get_reply_keyboard(texts.SIMPLE_ANSWERS, ["/cancel"]))
+    bot.set_state(message.from_user.id, states.ShowState.sort, message.chat.id)
+
+
+@logged_execution
+def handle_cancel_show(message, bot, pool):
+    bot.delete_state(message.from_user.id, message.chat.id)
+    bot.send_message(message.chat.id, texts.SHOW_CANCEL, reply_markup=keyboards.EMPTY)
+
+
+@logged_execution
+def handle_show_sort(message, bot, pool):
+    if message.text not in texts.SIMPLE_ANSWERS:
+        bot.send_message(message.chat.id,
+                         texts.WRONG_SIMPLE_ANSWER.format(texts.SIMPLE_ANSWERS[0], texts.SIMPLE_ANSWERS[1]),
+                         reply_markup=keyboards.get_reply_keyboard(texts.SIMPLE_ANSWERS, ["/cancel"]))
+        return
+    elif message.text == "да":
+        bot.set_state(message.from_user.id, states.ShowState.select_sort_field, message.chat.id)
+        bot.send_message(message.chat.id, texts.SHOW_SORT_CHOOSE,
+                         reply_markup=keyboards.get_reply_keyboard(texts.SHOW_SORT_LIST, ["/cancel"]))
+    elif message.text == "нет":
+        with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+            data["sort"] = message.text
+        print_show_list(message, bot, pool)
+
+
+@logged_execution
+def handle_show_sort_choose_field(message, bot, pool):
+    if message.text not in texts.SHOW_SORT_LIST:
+        bot.send_message(message.chat.id,
+                         texts.UPDATE_UNKNOWN.format(texts.SHOW_SORT_CHOOSE[0], texts.SHOW_SORT_LIST[1],
+                                                     texts.SHOW_SORT_LIST[2], texts.SHOW_SORT_LIST[3]),
+                         reply_markup=keyboards.get_reply_keyboard(texts.SHOW_SORT_LIST, ["/cancel"]))
+        return
+    with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+        data["sort"] = message.text
+    print_show_list(message, bot, pool)
+
+
+@logged_execution
+def print_show_list(message, bot, pool):
+    with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+        sort = data["sort"]
+
+    current_list = None
+    if sort == "нет":
+        current_list = db_model.get_films(pool, message.from_user.id)
+    else:
+        if sort == "name":
+            current_list = db_model.get_films_order_by_name(pool, message.from_user.id)
+        elif sort == "type":
+            current_list = db_model.get_films_order_by_type(pool, message.from_user.id)
+        elif sort == "year":
+            current_list = db_model.get_films_order_by_year(pool, message.from_user.id)
+        elif sort == "country":
+            current_list = db_model.get_films_order_by_country(pool, message.from_user.id)
+
     if len(current_list) == 0:
         bot.send_message(message.chat.id, texts.SHOW_EMPTY, reply_markup=keyboards.EMPTY)
     else:
@@ -163,5 +221,5 @@ def handle_show(message, bot, pool):
             result += "Тип: {}\n".format(film["type"]) if film["type"] else "Тип:\n"
             result += "Год: {}\n".format(film["year"]) if film["year"] else "Год:\n"
             result += "Страна: {}\n".format(film["country"]) if film["country"] else "Страна:\n"
-            result += "Заметка: {}\n".format(film["note"]) if film["note"] else "Заметка:\n"
+            result += "Заметка: {}\n".format(film["note"]) if film["note"] else "Заметка:\n\n"
         bot.send_message(message.chat.id, texts.SHOW.format(result), reply_markup=keyboards.EMPTY)

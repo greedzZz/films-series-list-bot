@@ -98,3 +98,7 @@ class UpdateState(StatesGroup):
     select_field = State()
     write_new_value = State()
 
+
+class ShowState(StatesGroup):
+    sort = State()
+    select_sort_field = State()

@@ -54,7 +54,17 @@ def get_update_handlers():
 
 def get_show_handlers():
     return [
-        Handler(callback=handlers.handle_show, commands=["show"])
+        Handler(callback=handlers.handle_show, commands=["show"]),
+        Handler(
+            callback=handlers.handle_cancel_show,
+            commands=["cancel"],
+            state=[
+                bot_states.ShowState.sort,
+                bot_states.ShowState.select_sort_field
+            ],
+        ),
+        Handler(callback=handlers.handle_show_sort, state=bot_states.ShowState.sort),
+        Handler(callback=handlers.handle_show_sort_choose_field, state=bot_states.ShowState.select_sort_field)
     ]
 
 

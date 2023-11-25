@@ -62,3 +62,19 @@ def update_film(pool, user_id, name, type, year, country, note):
 
 def get_films(pool, user_id):
     return execute_select_query(pool, queries.get_films, user_id=user_id)
+
+
+def get_films_order_by_name(pool, user_id):
+    return execute_select_query(pool, queries.get_films_order_by_name, user_id=user_id)
+
+
+def get_films_order_by_type(pool, user_id):
+    return execute_select_query(pool, queries.get_films_order_by_type, user_id=user_id)
+
+
+def get_films_order_by_year(pool, user_id):
+    return execute_select_query(pool, queries.get_films_order_by_year, user_id=user_id)
+
+
+def get_films_order_by_country(pool, user_id):
+    return execute_select_query(pool, queries.get_films_order_by_country, user_id=user_id)
