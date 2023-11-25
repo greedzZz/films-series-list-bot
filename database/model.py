@@ -55,6 +55,11 @@ def delete_film(pool, user_id, name):
     execute_update_query(pool, queries.delete_film, user_id=user_id, name=name)
 
 
+def update_film(pool, user_id, name, film_type, year, country, note):
+    execute_update_query(pool, queries.update_film,
+                         user_id=user_id, name=name, type=film_type, year=year, country=country, note=note)
+
+
 # def add_user_info(pool, user_id, first_name, last_name, age):
 #     execute_update_query(
 #         pool,

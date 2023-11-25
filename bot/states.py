@@ -93,6 +93,12 @@ class DeleteState(StatesGroup):
     name = State()
 
 
+class UpdateState(StatesGroup):
+    name = State()
+    select_field = State()
+    write_new_value = State()
+
+
 # class RegisterState(StatesGroup):
 #     first_name = State()
 #     last_name = State()

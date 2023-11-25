@@ -33,7 +33,7 @@ def handle_add_name(message, bot, pool):
     current_film = db_model.get_film(pool, message.from_user.id, message.text)
     if current_film:
         bot.delete_state(message.from_user.id, message.chat.id)
-        bot.send_message(message.chat.id, texts.ADD_EXISTS, reply_markup=keyboards.EMPTY)
+        bot.send_message(message.chat.id, texts.EXISTS, reply_markup=keyboards.EMPTY)
         return
     bot.delete_state(message.from_user.id, message.chat.id)
     db_model.add_film(pool, message.from_user.id, message.text)
@@ -61,12 +61,86 @@ def handle_delete_name(message, bot, pool):
     current_film = db_model.get_film(pool, message.from_user.id, message.text)
     if not current_film:
         bot.delete_state(message.from_user.id, message.chat.id)
-        bot.send_message(message.chat.id, texts.DELETE_NOT_EXISTS, reply_markup=keyboards.EMPTY)
+        bot.send_message(message.chat.id, texts.NOT_EXISTS, reply_markup=keyboards.EMPTY)
         return
     bot.delete_state(message.from_user.id, message.chat.id)
     db_model.delete_film(pool, message.from_user.id, message.text)
     bot.send_message(message.chat.id, texts.DELETE_SUCCESS.format(message.text), reply_markup=keyboards.EMPTY)
 
+
+@logged_execution
+def handle_update(message, bot, pool):
+    current_user = db_model.get_user(pool, message.from_user.id)
+    if not current_user:
+        bot.send_message(message.chat.id, texts.NOT_STARTED, reply_markup=keyboards.EMPTY)
+        return
+    bot.send_message(message.chat.id, texts.UPDATE, reply_markup=keyboards.get_reply_keyboard(["/cancel"]))
+    bot.set_state(message.from_user.id, states.UpdateState.name, message.chat.id)
+
+
+@logged_execution
+def handle_cancel_update(message, bot, pool):
+    bot.delete_state(message.from_user.id, message.chat.id)
+    bot.send_message(message.chat.id, texts.UPDATE_CANCEL, reply_markup=keyboards.EMPTY)
+
+
+@logged_execution
+def handle_update_name(message, bot, pool):
+    current_film = db_model.get_film(pool, message.from_user.id, message.text)
+    if not current_film:
+        bot.delete_state(message.from_user.id, message.chat.id)
+        bot.send_message(message.chat.id, texts.NOT_EXISTS, reply_markup=keyboards.EMPTY)
+        return
+    with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+        data["name"] = message.text
+    bot.set_state(message.from_user.id, states.UpdateState.select_field, message.chat.id)
+    bot.send_message(message.chat.id, texts.UPDATE_CHOOSE.format(message.text),
+                     reply_markup=keyboards.get_reply_keyboard(texts.UPDATE_LIST, ["/cancel"]))
+
+
+@logged_execution
+def handle_update_choose_field(message, bot, pool):
+    if message.text not in texts.UPDATE_LIST:
+        bot.send_message(message.chat.id, texts.UPDATE_UNKNOWN.format(texts.UPDATE_LIST),
+                         reply_markup=keyboards.get_reply_keyboard(texts.UPDATE_LIST, ["/cancel"]))
+        return
+
+    bot.set_state(message.from_user.id, states.UpdateState.write_new_value, message.chat.id)
+    with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+        data["field"] = message.text
+    if message.text == "type":
+        bot.send_message(message.chat.id, texts.UPDATE_ENTER.format(message.text),
+                         reply_markup=keyboards.get_reply_keyboard(texts.UPDATE_TYPE_LIST, ["/cancel"]))
+    else:
+        bot.send_message(message.chat.id, texts.UPDATE_ENTER.format(message.text),
+                         reply_markup=keyboards.get_reply_keyboard(["/cancel"]))
+
+
+@logged_execution
+def handle_update_enter_value(message, bot, pool):
+    with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+        field = data["field"]
+
+    new_value = message.text
+    if field == "type" and new_value not in texts.UPDATE_TYPE_LIST:
+        bot.send_message(message.chat.id, texts.UPDATE_WRONG_TYPE,
+                         reply_markup=keyboards.get_reply_keyboard(texts.UPDATE_TYPE_LIST, ["/cancel"]))
+        return
+    elif field == "year" and not new_value.isdigit():
+        bot.send_message(message.chat.id, texts.UPDATE_WRONG_YEAR,
+                         reply_markup=keyboards.get_reply_keyboard(["/cancel"]))
+        return
+    elif field == "year":
+        new_value = int(new_value)
+
+    with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+        name = data["name"]
+    bot.delete_state(message.from_user.id, message.chat.id)
+    current_data = db_model.get_film(pool, message.from_user.id, name)
+    current_data[field] = new_value
+    db_model.update_film(pool, **current_data)
+
+    bot.send_message(message.chat.id, texts.UPDATE_SUCCESS, reply_markup=keyboards.EMPTY,)
 
 # @logged_execution
 # def handle_start(message, bot, pool):
