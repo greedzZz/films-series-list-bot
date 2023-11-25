@@ -1,5 +1,6 @@
 # USERS_INFO_TABLE_PATH = "user_personal_info"
 USERS_TABLE_PATH = "users"
+FILMS_TABLE_PATH = "films"
 
 
 add_user = f"""
@@ -12,9 +13,7 @@ add_user = f"""
 get_user = f"""
     DECLARE $user_id AS Int64;
 
-    SELECT
-        user_id,
-        state
+    SELECT *
     FROM `{USERS_TABLE_PATH}`
     WHERE user_id == $user_id;
 """
@@ -33,6 +32,24 @@ set_user_state = f"""
 
     UPSERT INTO `{USERS_TABLE_PATH}` (`user_id`, `state`)
     VALUES ($user_id, $state);
+"""
+
+add_film = f"""
+    DECLARE $user_id AS Uint64;
+    DECLARE $name AS Utf8;
+
+    INSERT INTO `{FILMS_TABLE_PATH}` (user_id, name, type, year, country, note)
+    VALUES ($user_id, $name, null, null, null, null);
+"""
+
+get_film = f"""
+    DECLARE $user_id AS Uint64;
+    DECLARE $name AS Utf8;
+
+    SELECT *
+    FROM `{FILMS_TABLE_PATH}`
+    WHERE user_id == $user_id
+    AND name = $name;
 """
 
 # get_user_info = f"""

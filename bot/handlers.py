@@ -6,10 +6,38 @@ from user_interaction import texts
 
 @logged_execution
 def handle_start(message, bot, pool):
-    current_data = db_model.get_user(pool, message.from_user.id)
-    if not current_data:
+    current_user = db_model.get_user(pool, message.from_user.id)
+    if not current_user:
         db_model.add_user(pool, message.from_user.id)
     bot.send_message(message.chat.id, texts.START, reply_markup=keyboards.EMPTY)
+
+
+@logged_execution
+def handle_add(message, bot, pool):
+    current_user = db_model.get_user(pool, message.from_user.id)
+    if not current_user:
+        bot.send_message(message.chat.id, texts.NOT_STARTED, reply_markup=keyboards.EMPTY)
+        return
+    bot.send_message(message.chat.id, texts.ADD, reply_markup=keyboards.get_reply_keyboard(["/cancel"]))
+    bot.set_state(message.from_user.id, states.AddState.name, message.chat.id)
+
+
+@logged_execution
+def handle_cancel_add(message, bot, pool):
+    bot.delete_state(message.from_user.id, message.chat.id)
+    bot.send_message(message.chat.id, texts.ADD_CANCEL, reply_markup=keyboards.EMPTY)
+
+
+@logged_execution
+def handle_add_name(message, bot, pool):
+    current_film = db_model.get_film(pool, message.from_user.id, message.text)
+    if current_film:
+        bot.send_message(message.chat.id, texts.ADD_EXISTS, reply_markup=keyboards.EMPTY)
+        return
+    bot.delete_state(message.from_user.id, message.chat.id)
+    db_model.add_film(pool, message.from_user.id, message.text)
+    bot.send_message(message.chat.id, texts.ADD_SUCCESS.format(message.text), reply_markup=keyboards.EMPTY)
+
 
 # @logged_execution
 # def handle_start(message, bot, pool):

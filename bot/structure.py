@@ -18,6 +18,14 @@ def get_start_handlers():
     ]
 
 
+def get_add_handlers():
+    return [
+        Handler(callback=handlers.handle_add, commands=["add"]),
+        Handler(callback=handlers.handle_cancel_add, commands=["cancel"], state=bot_states.AddState.name),
+        Handler(callback=handlers.handle_add_name, state=bot_states.AddState.name),
+    ]
+
+
 # def get_start_handlers():
 #     return [
 #         Handler(callback=handlers.handle_start, commands=["start"]),
@@ -92,6 +100,7 @@ def create_bot(bot_token, pool):
 
     handlers = []
     handlers.extend(get_start_handlers())
+    handlers.extend(get_add_handlers())
     # handlers.extend(get_registration_handlers())
     # handlers.extend(get_show_data_handlers())
     # handlers.extend(get_delete_account_handlers())

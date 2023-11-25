@@ -4,6 +4,13 @@ START = ("Бот успешно запущен!\n\n"
          "/add\n"
          "/update\n"
          "/delete\n")
+NOT_STARTED = "Прежде чем использовать бота вперые, введите /start"
+
+ADD = "Введите название фильма/сериала (название не должно совпадать с другими фильмами/сериалами в вашем списке):"
+ADD_EXISTS = "Фильм/сериал с таким названием уже есть в вашем списке."
+ADD_CANCEL = "Добавление фильма было отменено."
+ADD_SUCCESS = "Фильм \"{}\" успешно добавлен."
+
 # START = (
 #     "Hello! This is a simple bot that can store your name and age, "
 #     "show them back to you and delete them if requested.\n\n"

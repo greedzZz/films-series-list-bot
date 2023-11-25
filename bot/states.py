@@ -85,6 +85,10 @@ class StateYDBStorage(StateStorageBase):
             return True
 
 
+class AddState(StatesGroup):
+    name = State()
+
+
 # class RegisterState(StatesGroup):
 #     first_name = State()
 #     last_name = State()
