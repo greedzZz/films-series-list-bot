@@ -60,35 +60,5 @@ def update_film(pool, user_id, name, type, year, country, note):
                          user_id=user_id, name=name, type=type, year=year, country=country, note=note)
 
 
-# def add_user_info(pool, user_id, first_name, last_name, age):
-#     execute_update_query(
-#         pool,
-#         queries.add_user_info,
-#         user_id=user_id,
-#         first_name=first_name,
-#         last_name=last_name,
-#         age=age,
-#     )
-#
-#
-# def get_user_info(pool, user_id):
-#     result = execute_select_query(pool, queries.get_user_info, user_id=user_id)
-#
-#     if len(result) != 1:
-#         return None
-#     return result[0]
-#
-#
-# def delete_user_info(pool, user_id):
-#     execute_update_query(pool, queries.delete_user_info, user_id=user_id)
-#
-#
-# def update_user_data(pool, user_id, first_name, last_name, age):
-#     execute_update_query(
-#         pool,
-#         queries.update_user_info,
-#         user_id=user_id,
-#         first_name=first_name,
-#         last_name=last_name,
-#         age=age,
-#     )
+def get_films(pool, user_id):
+    return execute_select_query(pool, queries.get_films, user_id=user_id)
