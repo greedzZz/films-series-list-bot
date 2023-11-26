@@ -140,6 +140,8 @@ def handle_show_sort(message, bot, pool):
         bot.send_message(message.chat.id, texts.SHOW_SORT_CHOOSE,
                          reply_markup=keyboards.get_reply_keyboard(texts.SHOW_SORT_LIST, ["/cancel"]))
     elif message.text == "нет":
+        with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+            data["sort"] = message.text
         send_filter_message(message, bot, pool)
 
 
@@ -151,6 +153,8 @@ def handle_show_sort_choose_field(message, bot, pool):
                                                         texts.SHOW_SORT_LIST[2], texts.SHOW_SORT_LIST[3]),
                          reply_markup=keyboards.get_reply_keyboard(texts.SHOW_SORT_LIST, ["/cancel"]))
         return
+    with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+        data["sort"] = message.text
     send_filter_message(message, bot, pool)
 
 
@@ -168,8 +172,8 @@ def handle_show_filter(message, bot, pool):
     elif message.text == "нет":
         with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
             data["filter"] = message.text
-        bot.delete_state(message.from_user.id, message.chat.id)
         print_show_list(message, bot, pool)
+        bot.delete_state(message.from_user.id, message.chat.id)
 
 
 @logged_execution
@@ -178,7 +182,7 @@ def handle_show_filter_choose_field(message, bot, pool):
         bot.send_message(message.chat.id,
                          texts.SHOW_FILTER_UNKNOWN.format(texts.SHOW_FILTER_LIST[0],
                                                           texts.SHOW_FILTER_LIST[1], texts.SHOW_FILTER_LIST[2]),
-                         reply_markup=keyboards.get_reply_keyboard(texts.SHOW_SORT_LIST, ["/cancel"]))
+                         reply_markup=keyboards.get_reply_keyboard(texts.SHOW_FILTER_LIST, ["/cancel"]))
         return
     bot.set_state(message.from_user.id, states.ShowState.write_filter_value, message.chat.id)
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
@@ -193,8 +197,8 @@ def handle_show_filter_enter_value(message, bot, pool):
     new_value = validate_field(message, bot, pool, filter)
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         data["field"] = new_value
-    bot.delete_state(message.from_user.id, message.chat.id)
     print_show_list(message, bot, pool)
+    bot.delete_state(message.from_user.id, message.chat.id)
 
 
 @logged_execution
@@ -305,8 +309,6 @@ def validate_field(message, bot, pool, field):
 
 @logged_execution
 def send_filter_message(message, bot, pool):
-    with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
-        data["sort"] = message.text
     bot.set_state(message.from_user.id, states.ShowState.filter, message.chat.id)
     bot.send_message(message.chat.id, texts.SHOW_FILTER,
                      reply_markup=keyboards.get_reply_keyboard(texts.SIMPLE_ANSWERS, ["/cancel"]))
