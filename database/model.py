@@ -153,3 +153,7 @@ def get_films_order_by_year_filter_by_country(pool, user_id, country):
 def get_films_order_by_country_filter_by_country(pool, user_id, country):
     return execute_select_query(pool, queries.get_films_order_by_country_filter_by_country,
                                 user_id=user_id, country=country)
+
+
+def get_films_check(pool, user_id):
+    return execute_select_query(pool, queries.get_films_check, user_id=user_id)

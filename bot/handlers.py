@@ -130,6 +130,10 @@ def handle_show(message, bot, pool):
         bot.send_message(message.chat.id, texts.NOT_STARTED, reply_markup=keyboards.EMPTY)
         return
 
+    current_list = db_model.get_films_check(pool, message.from_user.id)
+    if len(current_list) == 0:
+        bot.send_message(message.chat.id, texts.SHOW_EMPTY, reply_markup=keyboards.EMPTY)
+        return
     bot.send_message(message.chat.id, texts.SHOW_SORT,
                      reply_markup=keyboards.get_reply_keyboard(texts.SIMPLE_ANSWERS, ["/cancel"]))
     bot.set_state(message.from_user.id, states.ShowState.sort, message.chat.id)
@@ -277,7 +281,7 @@ def print_show_list(message, bot, pool):
         current_list = db_model.get_films_order_by_country_filter_by_country(pool, message.from_user.id, field)
 
     if len(current_list) == 0:
-        bot.send_message(message.chat.id, texts.SHOW_EMPTY, reply_markup=keyboards.EMPTY)
+        bot.send_message(message.chat.id, texts.SHOW_FILTER_EMPTY, reply_markup=keyboards.EMPTY)
     else:
         result = ""
         for film in current_list:

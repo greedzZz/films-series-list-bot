@@ -282,3 +282,12 @@ get_films_order_by_country_filter_by_country = f"""
     AND country = $country
     ORDER BY country ASC, name ASC;
 """
+
+get_films_check = f"""
+    DECLARE $user_id AS Uint64;
+
+    SELECT *
+    FROM `{FILMS_TABLE_PATH}`
+    WHERE user_id == $user_id
+    LIMIT 1;
+"""
