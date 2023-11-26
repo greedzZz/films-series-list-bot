@@ -99,7 +99,19 @@ def handle_update_choose_field(message, bot, pool):
 def handle_update_enter_value(message, bot, pool):
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         field = data["field"]
-    new_value = validate_field(message, bot, pool, field)
+
+    new_value = message.text
+    if field == "type" and new_value not in texts.TYPE_LIST:
+        bot.send_message(message.chat.id,
+                         texts.WRONG_TYPE.format(texts.TYPE_LIST[0], texts.TYPE_LIST[1]),
+                         reply_markup=keyboards.get_reply_keyboard(texts.TYPE_LIST, ["/cancel"]))
+        return
+    elif field == "year" and not new_value.isdigit():
+        bot.send_message(message.chat.id, texts.WRONG_YEAR,
+                         reply_markup=keyboards.get_reply_keyboard(["/cancel"]))
+        return
+    elif field == "year":
+        new_value = int(new_value)
 
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         name = data["name"]
@@ -194,7 +206,20 @@ def handle_show_filter_choose_field(message, bot, pool):
 def handle_show_filter_enter_value(message, bot, pool):
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         filter = data["filter"]
-    new_value = validate_field(message, bot, pool, filter)
+
+    new_value = message.text
+    if filter == "type" and new_value not in texts.TYPE_LIST:
+        bot.send_message(message.chat.id,
+                         texts.WRONG_TYPE.format(texts.TYPE_LIST[0], texts.TYPE_LIST[1]),
+                         reply_markup=keyboards.get_reply_keyboard(texts.TYPE_LIST, ["/cancel"]))
+        return
+    elif filter == "year" and not new_value.isdigit():
+        bot.send_message(message.chat.id, texts.WRONG_YEAR,
+                         reply_markup=keyboards.get_reply_keyboard(["/cancel"]))
+        return
+    elif filter == "year":
+        new_value = int(new_value)
+
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         data["field"] = new_value
     print_show_list(message, bot, pool)
@@ -288,23 +313,6 @@ def send_enter_message(message, bot, pool, text):
     else:
         bot.send_message(message.chat.id, text.format(message.text),
                          reply_markup=keyboards.get_reply_keyboard(["/cancel"]))
-
-
-@logged_execution
-def validate_field(message, bot, pool, field):
-    new_value = message.text
-    if field == "type" and new_value not in texts.TYPE_LIST:
-        bot.send_message(message.chat.id,
-                         texts.WRONG_TYPE.format(texts.TYPE_LIST[0], texts.TYPE_LIST[1]),
-                         reply_markup=keyboards.get_reply_keyboard(texts.TYPE_LIST, ["/cancel"]))
-        return
-    elif field == "year" and not new_value.isdigit():
-        bot.send_message(message.chat.id, texts.WRONG_YEAR,
-                         reply_markup=keyboards.get_reply_keyboard(["/cancel"]))
-        return
-    elif field == "year":
-        new_value = int(new_value)
-    return new_value
 
 
 @logged_execution
