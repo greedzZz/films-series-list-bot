@@ -60,11 +60,17 @@ def get_show_handlers():
             commands=["cancel"],
             state=[
                 bot_states.ShowState.sort,
-                bot_states.ShowState.select_sort_field
+                bot_states.ShowState.select_sort_field,
+                bot_states.ShowState.filter,
+                bot_states.ShowState.select_filter_field,
+                bot_states.ShowState.write_filter_value
             ],
         ),
         Handler(callback=handlers.handle_show_sort, state=bot_states.ShowState.sort),
-        Handler(callback=handlers.handle_show_sort_choose_field, state=bot_states.ShowState.select_sort_field)
+        Handler(callback=handlers.handle_show_sort_choose_field, state=bot_states.ShowState.select_sort_field),
+        Handler(callback=handlers.handle_show_filter, state=bot_states.ShowState.select_filter_field),
+        Handler(callback=handlers.handle_show_filter_choose_field, state=bot_states.ShowState.select_filter_field),
+        Handler(callback=handlers.handle_show_filter_enter_value, state=bot_states.ShowState.write_filter_value)
     ]
 
 

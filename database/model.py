@@ -78,3 +78,78 @@ def get_films_order_by_year(pool, user_id):
 
 def get_films_order_by_country(pool, user_id):
     return execute_select_query(pool, queries.get_films_order_by_country, user_id=user_id)
+
+
+def get_films_filter_by_type(pool, user_id, type):
+    return execute_select_query(pool, queries.get_films_filter_by_type,
+                                user_id=user_id, type=type)
+
+
+def get_films_filter_by_year(pool, user_id, year):
+    return execute_select_query(pool, queries.get_films_filter_by_year,
+                                user_id=user_id, year=year)
+
+
+def get_films_filter_by_country(pool, user_id, country):
+    return execute_select_query(pool, queries.get_films_filter_by_country,
+                                user_id=user_id, country=country)
+
+
+def get_films_order_by_name_filter_by_type(pool, user_id, type):
+    return execute_select_query(pool, queries.get_films_order_by_name_filter_by_type,
+                                user_id=user_id, type=type)
+
+
+def get_films_order_by_type_filter_by_type(pool, user_id, type):
+    return execute_select_query(pool, queries.get_films_order_by_type_filter_by_type,
+                                user_id=user_id, type=type)
+
+
+def get_films_order_by_year_filter_by_type(pool, user_id, type):
+    return execute_select_query(pool, queries.get_films_order_by_year_filter_by_type,
+                                user_id=user_id, type=type)
+
+
+def get_films_order_by_country_filter_by_type(pool, user_id, type):
+    return execute_select_query(pool, queries.get_films_order_by_country_filter_by_type,
+                                user_id=user_id, type=type)
+
+
+def get_films_order_by_name_filter_by_year(pool, user_id, year):
+    return execute_select_query(pool, queries.get_films_order_by_name_filter_by_year,
+                                user_id=user_id, year=year)
+
+
+def get_films_order_by_type_filter_by_year(pool, user_id, year):
+    return execute_select_query(pool, queries.get_films_order_by_type_filter_by_year,
+                                user_id=user_id, year=year)
+
+
+def get_films_order_by_year_filter_by_year(pool, user_id, year):
+    return execute_select_query(pool, queries.get_films_order_by_year_filter_by_year,
+                                user_id=user_id, year=year)
+
+
+def get_films_order_by_country_filter_by_year(pool, user_id, year):
+    return execute_select_query(pool, queries.get_films_order_by_country_filter_by_year,
+                                user_id=user_id, year=year)
+
+
+def get_films_order_by_name_filter_by_country(pool, user_id, country):
+    return execute_select_query(pool, queries.get_films_order_by_name_filter_by_country,
+                                user_id=user_id, country=country)
+
+
+def get_films_order_by_type_filter_by_country(pool, user_id, country):
+    return execute_select_query(pool, queries.get_films_order_by_type_filter_by_country,
+                                user_id=user_id, country=country)
+
+
+def get_films_order_by_year_filter_by_country(pool, user_id, country):
+    return execute_select_query(pool, queries.get_films_order_by_year_filter_by_country,
+                                user_id=user_id, country=country)
+
+
+def get_films_order_by_country_filter_by_country(pool, user_id, country):
+    return execute_select_query(pool, queries.get_films_order_by_country_filter_by_country,
+                                user_id=user_id, country=country)

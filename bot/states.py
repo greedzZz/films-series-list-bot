@@ -102,3 +102,6 @@ class UpdateState(StatesGroup):
 class ShowState(StatesGroup):
     sort = State()
     select_sort_field = State()
+    filter = State()
+    select_filter_field = State()
+    write_filter_value = State()
