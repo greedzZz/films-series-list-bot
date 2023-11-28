@@ -151,11 +151,11 @@ def handle_show_sort(message, bot, pool):
                          texts.WRONG_SIMPLE_ANSWER.format(texts.SIMPLE_ANSWERS[0], texts.SIMPLE_ANSWERS[1]),
                          reply_markup=keyboards.get_reply_keyboard(texts.SIMPLE_ANSWERS, ["/cancel"]))
         return
-    elif message.text == "да":
+    elif message.text == "yes":
         bot.set_state(message.from_user.id, states.ShowState.select_sort_field, message.chat.id)
         bot.send_message(message.chat.id, texts.SHOW_SORT_CHOOSE,
                          reply_markup=keyboards.get_reply_keyboard(texts.SHOW_SORT_LIST, ["/cancel"]))
-    elif message.text == "нет":
+    elif message.text == "no":
         with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
             data["sort"] = message.text
         send_filter_message(message, bot, pool)
@@ -181,11 +181,11 @@ def handle_show_filter(message, bot, pool):
                          texts.WRONG_SIMPLE_ANSWER.format(texts.SIMPLE_ANSWERS[0], texts.SIMPLE_ANSWERS[1]),
                          reply_markup=keyboards.get_reply_keyboard(texts.SIMPLE_ANSWERS, ["/cancel"]))
         return
-    elif message.text == "да":
+    elif message.text == "yes":
         bot.set_state(message.from_user.id, states.ShowState.select_filter_field, message.chat.id)
         bot.send_message(message.chat.id, texts.SHOW_FILTER_CHOOSE,
                          reply_markup=keyboards.get_reply_keyboard(texts.SHOW_FILTER_LIST, ["/cancel"]))
-    elif message.text == "нет":
+    elif message.text == "no":
         with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
             data["filter"] = message.text
         print_show_list(message, bot, pool)
@@ -239,21 +239,21 @@ def print_show_list(message, bot, pool):
 
     sortfilter = sort + filter
     current_list = None
-    if sortfilter == "нетнет":
+    if sortfilter == "nono":
         current_list = db_model.get_films(pool, message.from_user.id)
-    elif sortfilter == "nameнет":
+    elif sortfilter == "nameno":
         current_list = db_model.get_films_order_by_name(pool, message.from_user.id)
-    elif sortfilter == "typeнет":
+    elif sortfilter == "typeno":
         current_list = db_model.get_films_order_by_type(pool, message.from_user.id)
-    elif sortfilter == "yearнет":
+    elif sortfilter == "yearno":
         current_list = db_model.get_films_order_by_year(pool, message.from_user.id)
-    elif sortfilter == "countryнет":
+    elif sortfilter == "countryno":
         current_list = db_model.get_films_order_by_country(pool, message.from_user.id)
-    elif sortfilter == "нетtype":
+    elif sortfilter == "notype":
         current_list = db_model.get_films_filter_by_type(pool, message.from_user.id, field)
-    elif sortfilter == "нетyear":
+    elif sortfilter == "noyear":
         current_list = db_model.get_films_filter_by_year(pool, message.from_user.id, field)
-    elif sortfilter == "нетcountry":
+    elif sortfilter == "nocountry":
         current_list = db_model.get_films_filter_by_country(pool, message.from_user.id, field)
     elif sortfilter == "nametype":
         current_list = db_model.get_films_order_by_name_filter_by_type(pool, message.from_user.id, field)
