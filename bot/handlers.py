@@ -289,7 +289,7 @@ def print_show_list(message, bot, pool):
             result += "Тип: {}\n".format(film["type"]) if film["type"] else "Тип:\n"
             result += "Год: {}\n".format(film["year"]) if film["year"] else "Год:\n"
             result += "Страна: {}\n".format(film["country"]) if film["country"] else "Страна:\n"
-            result += "Заметка: {}\n".format(film["note"]) if film["note"] else "Заметка:\n\n"
+            result += "Заметка: {}\n\n".format(film["note"]) if film["note"] else "Заметка:\n\n"
         bot.send_message(message.chat.id, texts.SHOW.format(result), reply_markup=keyboards.EMPTY)
 
 
