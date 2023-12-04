@@ -285,11 +285,15 @@ def print_show_list(message, bot, pool):
     else:
         result = ""
         for film in current_list:
-            result += "Название: {}\n".format(film["name"])
-            result += "Тип: {}\n".format(film["type"]) if film["type"] else "Тип:\n"
-            result += "Год: {}\n".format(film["year"]) if film["year"] else "Год:\n"
-            result += "Страна: {}\n".format(film["country"]) if film["country"] else "Страна:\n"
-            result += "Заметка: {}\n\n".format(film["note"]) if film["note"] else "Заметка:\n\n"
+            result += "\n\nНазвание: {}".format(film["name"])
+            if film["type"]:
+                result += "\nТип: {}".format(film["type"])
+            if film["year"]:
+                result += "\nГод: {}".format(film["year"])
+            if film["country"]:
+                result += "\nСтрана: {}".format(film["country"])
+            if film["note"]:
+                result += "\nЗаметка: {}".format(film["note"])
         bot.send_message(message.chat.id, texts.SHOW.format(result), reply_markup=keyboards.EMPTY)
 
 
